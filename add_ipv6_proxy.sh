@@ -110,7 +110,6 @@ tee /etc/systemd/system/3proxy_$1.service << EOF
  TimeoutSec=0
  StandardOutput=tty
  RemainAfterExit=yes
- SysVStartPriority=99
 
 [Install]
  WantedBy=multi-user.target
@@ -179,3 +178,4 @@ do
 cat user.list >> 3proxy_$1.cfg
 chmod +x /etc/network/ip_add
 /usr/sbin/sysctl -p
+/usr/bin/systemctl disable 3proxy
