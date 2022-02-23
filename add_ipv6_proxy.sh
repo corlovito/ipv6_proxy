@@ -178,3 +178,4 @@ do
 #echo "-----------------"
 cat user.list >> 3proxy_$1.cfg
 chmod +x /etc/network/ip_add
+/usr/sbin/sysctl -p
