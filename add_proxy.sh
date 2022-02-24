@@ -15,7 +15,6 @@ tee /etc/systemd/system/3proxy_$1.service << EOF
  TimeoutSec=0
  StandardOutput=tty
  RemainAfterExit=yes
- SysVStartPriority=99
 
 [Install]
  WantedBy=multi-user.target
@@ -27,18 +26,16 @@ tee  /usr/local/3proxy/$1.cfg << EOF
 monitor /usr/local/3proxy/$1.cfg
 
 daemon
-nserver 192.168.20.1
+maxconn 500
+nserver 8.8.8.8
+nserver 8.8.4.4
+nserver 1.1.1.1
+nscache 65536
 timeouts 1 5 30 60 180 1800 15 60
-maxconn 5000
-nscache 65535
-log /dev/null
+setgid 65535
+setuid 65535
+stacksize 6000
 
-auth strong
-users $1:CL:$PASS
-deny * * $/usr/local/3proxy/acl/deny.txt * * * *
-allow *
-proxy -n -a -p$2 -i$3 -e$4
-flush
 EOF
 
-echo $3:$2:$1:$PASS $DATA >> /usr/local/3proxy/pass.csv
+
