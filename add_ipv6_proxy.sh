@@ -125,6 +125,7 @@ echo > ip.list
 #echo > /etc/network/ip_add
 #echo > /etc/3proxy/3proxy.cfg
 tee 3proxy_$1.cfg << EOF
+monitor /usr/local/3proxy/$1.cfg
 daemon
 maxconn 500
 nserver 8.8.8.8
