@@ -1,7 +1,55 @@
 #!/bin/bash
+cd ~
+apt-get update
+apt-get install -y build-essential
+wget https://github.com/z3APA3A/3proxy/archive/0.9.3.tar.gz
+tar xzf 0.9.3.tar.gz
+cd ~/3proxy-0.9.3
+make -f Makefile.Linux
+mkdir /etc/3proxy
+mkdir /usr/local/3proxy
+cd ~/3proxy-0.9.3/bin
+cp 3proxy /usr/bin/
+cp 3proxy /usr/local/3proxy
+touch /etc/systemd/system/3proxy_$1.service
+#touch ./3proxy_$1.service
+PASS=$(date +%s | sha256sum | base64 | head -c 12 ; echo)
+DATA=$(date)
+tee /etc/systemd/system/3proxy_$1.service << EOF
+[Unit]
+ Description=/etc/rc.local Compatibility
+ ConditionPathExists=/etc/rc.local
+
+[Service]
+ Type=simple
+ Restart=on-failure
+ ExecStart=/usr/local/3proxy/3proxy /usr/local/3proxy/$1.cfg
+ TimeoutSec=0
+ StandardOutput=tty
+ RemainAfterExit=yes
+
+[Install]
+ WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+
+tee  /usr/local/3proxy/$1.cfg << EOF
+### cfgig for modem $1. filename $1.cfg
+monitor /usr/local/3proxy/$1.cfg
+
+"add_proxy.sh" 53L, 1077C written
+root@modeler:/usr/local/3proxy/ipv6_proxy#
+root@modeler:/usr/local/3proxy/ipv6_proxy#
+root@modeler:/usr/local/3proxy/ipv6_proxy#
+root@modeler:/usr/local/3proxy/ipv6_proxy#
+root@modeler:/usr/local/3proxy/ipv6_proxy#
+root@modeler:/usr/local/3proxy/ipv6_proxy#
+root@modeler:/usr/local/3proxy/ipv6_proxy#
+root@modeler:/usr/local/3proxy/ipv6_proxy# cat add_ipv6_proxy.sh
+#!/bin/bash
 echo "post-up /etc/network/ip_add" >> /etc/network/interfaces
 #mkdir /usr/local/3proxy
-touch /usr/local/3proxy/3proxy_$1.cfg
+#touch /usr/local/3proxy/3proxy_$1.cfg
 #cp /etc/3proxy/3proxy /usr/local/3proxy/3proxy
 ext_interface () {
     for interface in /sys/class/net/*
@@ -14,7 +62,7 @@ ext_interface () {
 
 interface=$(ext_interface)
 ip_address=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
-network=2a01:230:4:584 # your ipv6 network prefix
+#network=2a01:230:4:584 # your ipv6 network prefix
 #apt-get update
 #apt-get install curl net-tools -y
 
@@ -27,7 +75,7 @@ DefaultLimitNOFILE=102400
 DefaultLimitAS=infinity
 DefaultLimitNPROC=102400
 DefaultLimitMEMLOCK=infinity
-" >> /etc/systemd/system.conf 
+" >> /etc/systemd/system.conf
  echo  "
 * soft nofile 100000
 * hard nofile 100000
@@ -43,14 +91,14 @@ tee  /etc/systemd/system/rc-local.service << EOF
 [Unit]
  Description=/etc/rc.local Compatibility
   ConditionPathExists=/etc/rc.local
-   
+
   [Service]
    Type=forking
     ExecStart=/etc/rc.local start
      TimeoutSec=0
  StandardOutput=tty
  RemainAfterExit=yes
- 
+
 [Install]
  WantedBy=multi-user.target
 EOF
@@ -94,38 +142,25 @@ net.ipv4.conf.all.rp_filter=0
 EOF
 
 
-touch /etc/systemd/system/3proxy_$1.service
-#touch ./3proxy_$1.service
-PASS=$(date +%s | sha256sum | base64 | head -c 12 ; echo)
-DATA=$(date)
-tee /etc/systemd/system/3proxy_$1.service << EOF
-[Unit]
- Description=/etc/rc.local Compatibility
- ConditionPathExists=/etc/rc.local
-
-[Service]
- Type=simple
- Restart=on-failure
- ExecStart=/usr/local/3proxy/3proxy /usr/local/3proxy/3proxy_$1.cfg
- TimeoutSec=0
- StandardOutput=tty
- RemainAfterExit=yes
-
-[Install]
- WantedBy=multi-user.target
-EOF
-systemctl daemon-reload
 ##############
 ###generate file 3proxy
 ##############
 
 echo > user.list
 echo > ip.list
-#echo > proxy_user.txt
-#echo > /etc/network/ip_add
+echo > proxy_user.txt
+echo > /etc/network/ip_add
 #echo > /etc/3proxy/3proxy.cfg
-tee 3proxy_$1.cfg << EOF
-monitor /usr/local/3proxy/$1.cfg
+
+
+array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
+MAXCOUNT=500
+count=1
+for ((i=1, y=1, MAXCOUNT=500, INT=10000, INT2=20000; i < 11; i++, INT+=500, INT2+=500))
+do
+x=1
+tee 3proxy_$i.cfg << EOF
+monitor /usr/local/3proxy/3proxy_$i.cfg
 daemon
 maxconn 500
 nserver 8.8.8.8
@@ -138,45 +173,66 @@ setuid 65535
 stacksize 6000
 EOF
 
+touch /etc/systemd/system/3proxy_$i.service
+#touch ./3proxy_$1.service
+PASS=$(date +%s | sha256sum | base64 | head -c 12 ; echo)
+DATA=$(date)
+tee /etc/systemd/system/3proxy_$i.service << EOF
+[Unit]
+ Description=/etc/rc.local Compatibility
+ ConditionPathExists=/etc/rc.local
 
-array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
-MAXCOUNT=500
-count=1
+[Service]
+ Type=simple
+ Restart=on-failure
+ ExecStart=/usr/local/3proxy/3proxy /usr/local/3proxy/3proxy_$i.cfg
+ TimeoutSec=0
+ StandardOutput=tty
+ RemainAfterExit=yes
 
-rnd_ip_block ()
-{
+[Install]
+ WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl enable 3proxy_$i
+
+while  [ "$x" -lt 550 ]
+do
     a=${array[$RANDOM%16]}${array[$RANDOM%16]}${array[$RANDOM%16]}${array[$RANDOM%16]}
     b=${array[$RANDOM%16]}${array[$RANDOM%16]}${array[$RANDOM%16]}${array[$RANDOM%16]}
     c=${array[$RANDOM%16]}${array[$RANDOM%16]}${array[$RANDOM%16]}${array[$RANDOM%16]}
     d=${array[$RANDOM%16]}${array[$RANDOM%16]}${array[$RANDOM%16]}${array[$RANDOM%16]}
-    
-    CONFIG_NAME=10
-    INT=14509
-    INT2=24509
-    PORT=$(($INT+$count))
-    PORT2=$(($INT2+$count))
+
+    CONFIG_NAME=$i
+    #INT=10000
+    #INT2=20000
+    PORT=$(($INT+$x))
+    PORT2=$(($INT2+$x))
     USER=$(openssl rand -base64 32 | sha256sum | base64 | head -c 12 ; echo)
     PASS=$(openssl rand -base64 32 | sha256sum | base64 | head -c 12 ; echo)
     echo $network:$a:$b:$c:$d >> ip.list
     echo users $USER:CL:$PASS >> user.list
     echo $ip_address:$PORT:$USER:$PASS >> proxy_user.txt
-    echo ip -6 addr add $network:$a:$b:$c:$d dev $interface >> /etc/network/ip_add
-    echo auth strong >> 3proxy_$CONFIG_NAME.cfg
-    echo allow $USER >> 3proxy_$CONFIG_NAME.cfg
-    echo proxy -6 -s0 -n -a -p$PORT -i$ip_address -e$network:$a:$b:$c:$d >> 3proxy_$CONFIG_NAME.cfg
-    echo socks -6 -s0 -n -a -p$PORT2 -i$ip_address -e$network:$a:$b:$c:$d >> 3proxy_$CONFIG_NAME.cfg
-    echo flush >> 3proxy_$CONFIG_NAME.cfg
-}
-
-#echo "$MAXCOUNT случайных IPv6:"
-#echo "-----------------"
-while [ "$count" -le $MAXCOUNT ]        # Генерация 20 ($MAXCOUNT) случайных чисел.
-do
-        rnd_ip_block
-        let "count += 1"                # Нарастить счетчик.
-        done
-#echo "-----------------"
-cat user.list >> 3proxy_$1.cfg
+    echo ip -6 addr add $1:$a:$b:$c:$d dev $interface >> /etc/network/ip_add
+    echo auth strong >> 3proxy_$i.cfg
+    echo allow $USER >> 3proxy_$i.cfg
+    echo proxy -6 -s0 -n -a -p$PORT -i$ip_address -e$1:$a:$b:$c:$d >> 3proxy_$i.cfg
+    echo socks -6 -s0 -n -a -p$PORT2 -i$ip_address -e$1:$a:$b:$c:$d >> 3proxy_$i.cfg
+    echo flush >> 3proxy_$i.cfg
+    let "x += 1"
+done
+done
+#while [ "$count" -le $MAXCOUNT ]        # Генерация 20 ($MAXCOUNT) случайных чисел.
+#do
+ #       rnd_ip_block
+  #      let "count += 1"                # Нарастить счетчик.
+   #     done
 chmod +x /etc/network/ip_add
 /usr/sbin/sysctl -p
+
+for ((i=1; i <11; i++))
+do
+    cat ./user.list >> 3proxy_$i.cfg
+done
+
 /usr/bin/systemctl disable 3proxy
