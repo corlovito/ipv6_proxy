@@ -1,7 +1,7 @@
 #!/bin/bash
 cd ~
 apt-get update
-apt-get install -y build-essential
+apt-get install -y build-essential net-tools
 wget https://github.com/z3APA3A/3proxy/archive/0.9.3.tar.gz
 tar xzf 0.9.3.tar.gz
 cd ~/3proxy-0.9.3
@@ -228,6 +228,7 @@ done
   #      let "count += 1"                # Нарастить счетчик.
    #     done
 chmod +x /etc/network/ip_add
+chmod +x /etc/rc.local
 /usr/sbin/sysctl -p
 
 for ((i=1; i <11; i++))
