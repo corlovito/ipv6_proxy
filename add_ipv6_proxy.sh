@@ -237,3 +237,4 @@ do
 done
 
 /usr/bin/systemctl disable 3proxy
+echo "post-up /etc/network/ip_add" >> a
