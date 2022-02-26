@@ -159,7 +159,7 @@ rnd_ip_block ()
     PASS=$(openssl rand -base64 32 | sha256sum | base64 | head -c 12 ; echo)
     echo $network:$a:$b:$c:$d >> ip.list
     echo users $USER:CL:$PASS >> user.list
-    echo $USER:$PASS:$ip_address:$PORT >> proxy_user.txt
+    echo $ip_address:$PORT:$USER:$PASS >> proxy_user.txt
     echo ip -6 addr add $network:$a:$b:$c:$d dev $interface >> /etc/network/ip_add
     echo auth strong >> 3proxy_$CONFIG_NAME.cfg
     echo allow $USER >> 3proxy_$CONFIG_NAME.cfg
