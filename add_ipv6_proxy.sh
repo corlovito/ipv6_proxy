@@ -11,7 +11,7 @@ mkdir /usr/local/3proxy
 cd ~/3proxy-0.9.3/bin
 cp 3proxy /usr/bin/
 cp 3proxy /usr/local/3proxy
-touch /etc/systemd/system/3proxy_$1.service
+
 #touch ./3proxy_$1.service
 PASS=$(date +%s | sha256sum | base64 | head -c 12 ; echo)
 DATA=$(date)
