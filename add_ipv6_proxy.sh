@@ -11,46 +11,12 @@ mkdir /usr/local/3proxy
 cd ~/3proxy-0.9.3/bin
 cp 3proxy /usr/bin/
 cp 3proxy /usr/local/3proxy
-touch /etc/systemd/system/3proxy_$1.service
-#touch ./3proxy_$1.service
+
 PASS=$(date +%s | sha256sum | base64 | head -c 12 ; echo)
 DATA=$(date)
-tee /etc/systemd/system/3proxy_$1.service << EOF
-[Unit]
- Description=/etc/rc.local Compatibility
- ConditionPathExists=/etc/rc.local
 
-[Service]
- Type=simple
- Restart=on-failure
- ExecStart=/usr/local/3proxy/3proxy /usr/local/3proxy/$1.cfg
- TimeoutSec=0
- StandardOutput=tty
- RemainAfterExit=yes
-
-[Install]
- WantedBy=multi-user.target
-EOF
-systemctl daemon-reload
-
-tee  /usr/local/3proxy/$1.cfg << EOF
-### cfgig for modem $1. filename $1.cfg
-monitor /usr/local/3proxy/$1.cfg
-
-"add_proxy.sh" 53L, 1077C written
-root@modeler:/usr/local/3proxy/ipv6_proxy#
-root@modeler:/usr/local/3proxy/ipv6_proxy#
-root@modeler:/usr/local/3proxy/ipv6_proxy#
-root@modeler:/usr/local/3proxy/ipv6_proxy#
-root@modeler:/usr/local/3proxy/ipv6_proxy#
-root@modeler:/usr/local/3proxy/ipv6_proxy#
-root@modeler:/usr/local/3proxy/ipv6_proxy#
-root@modeler:/usr/local/3proxy/ipv6_proxy# cat add_ipv6_proxy.sh
-#!/bin/bash
 echo "post-up /etc/network/ip_add" >> /etc/network/interfaces
-#mkdir /usr/local/3proxy
-#touch /usr/local/3proxy/3proxy_$1.cfg
-#cp /etc/3proxy/3proxy /usr/local/3proxy/3proxy
+
 ext_interface () {
     for interface in /sys/class/net/*
     do
@@ -228,11 +194,10 @@ done
   #      let "count += 1"                # Нарастить счетчик.
    #     done
 chmod +x /etc/network/ip_add
+chmod +x /etc/rc.local
 /usr/sbin/sysctl -p
 
 for ((i=1; i <11; i++))
 do
     cat ./user.list >> 3proxy_$i.cfg
 done
-
-/usr/bin/systemctl disable 3proxy
