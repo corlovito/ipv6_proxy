@@ -1,7 +1,11 @@
 #!/bin/bash
 apt-get update
+<<<<<<< HEAD
 apt-get install build-essential curl net-tools -y
 cd ~
+=======
+apt-get install -y build-essential net-tools
+>>>>>>> 3eeb5e890e4266fd8402e41d8fd685a1c12c159b
 wget https://github.com/z3APA3A/3proxy/archive/0.9.3.tar.gz
 tar xzf 0.9.3.tar.gz
 cd ~/3proxy-0.9.3
@@ -12,6 +16,10 @@ cd ~/3proxy-0.9.3/bin
 cp 3proxy /usr/bin/
 cp 3proxy /usr/local/3proxy
 
+<<<<<<< HEAD
+=======
+#touch ./3proxy_$1.service
+>>>>>>> 3eeb5e890e4266fd8402e41d8fd685a1c12c159b
 PASS=$(date +%s | sha256sum | base64 | head -c 12 ; echo)
 DATA=$(date)
 
