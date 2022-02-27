@@ -1,7 +1,7 @@
 #!/bin/bash
-cd ~
 apt-get update
-apt-get install -y build-essential
+apt-get install build-essential curl net-tools -y
+cd ~
 wget https://github.com/z3APA3A/3proxy/archive/0.9.3.tar.gz
 tar xzf 0.9.3.tar.gz
 cd ~/3proxy-0.9.3
@@ -28,9 +28,6 @@ ext_interface () {
 
 interface=$(ext_interface)
 ip_address=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
-#network=2a01:230:4:584 # your ipv6 network prefix
-#apt-get update
-#apt-get install curl net-tools -y
 
  echo  "
 DefaultLimitDATA=infinity
@@ -116,7 +113,6 @@ echo > user.list
 echo > ip.list
 echo > proxy_user.txt
 echo > /etc/network/ip_add
-#echo > /etc/3proxy/3proxy.cfg
 
 
 array=( 1 2 3 4 5 6 7 8 9 0 a b c d e f )
@@ -188,11 +184,6 @@ do
     let "x += 1"
 done
 done
-#while [ "$count" -le $MAXCOUNT ]        # Генерация 20 ($MAXCOUNT) случайных чисел.
-#do
- #       rnd_ip_block
-  #      let "count += 1"                # Нарастить счетчик.
-   #     done
 chmod +x /etc/network/ip_add
 chmod +x /etc/rc.local
 /usr/sbin/sysctl -p
