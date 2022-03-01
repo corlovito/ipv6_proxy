@@ -133,7 +133,7 @@ nscache 65536
 timeouts 1 5 30 60 180 1800 15 60
 setgid 65535
 setuid 65535
-stacksize 6000
+stacksize 60000
 EOF
 
 touch /etc/systemd/system/3proxy_$i.service
