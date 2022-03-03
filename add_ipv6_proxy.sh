@@ -190,5 +190,5 @@ chmod +x /etc/rc.local
 
 for ((i=1; i <11; i++))
 do
-    cat ./user.list >> /usr/local/3proxy/3proxy_$i.cfg
+    cat /usr/local/3proxy/user.list >> /usr/local/3proxy/3proxy_$i.cfg
 done
