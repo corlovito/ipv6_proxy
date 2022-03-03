@@ -172,15 +172,15 @@ do
     PORT2=$(($INT2+$x))
     USER=$(openssl rand -base64 32 | sha256sum | base64 | head -c 12 ; echo)
     PASS=$(openssl rand -base64 32 | sha256sum | base64 | head -c 12 ; echo)
-    echo $network:$a:$b:$c:$d >> ip.list
-    echo users $USER:CL:$PASS >> user.list
-    echo $ip_address:$PORT:$USER:$PASS >> proxy_user.txt
+    echo $network:$a:$b:$c:$d >> /usr/local/3proxy/ip.list
+    echo users $USER:CL:$PASS >> /usr/local/3proxy/user.list
+    echo $ip_address:$PORT:$USER:$PASS >> /usr/local/3proxy/proxy_user.txt
     echo ip -6 addr add $1:$a:$b:$c:$d dev $interface >> /etc/network/ip_add
-    echo auth strong >> 3proxy_$i.cfg
-    echo allow $USER >> 3proxy_$i.cfg
-    echo proxy -6 -s0 -n -a -p$PORT -i$ip_address -e$1:$a:$b:$c:$d >> 3proxy_$i.cfg
-    echo socks -6 -s0 -n -a -p$PORT2 -i$ip_address -e$1:$a:$b:$c:$d >> 3proxy_$i.cfg
-    echo flush >> 3proxy_$i.cfg
+    echo auth strong >> /usr/local/3proxy/3proxy_$i.cfg
+    echo allow $USER >> /usr/local/3proxy/3proxy_$i.cfg
+    echo proxy -6 -s0 -n -a -p$PORT -i$ip_address -e$1:$a:$b:$c:$d >> /usr/local/3proxy/3proxy_$i.cfg
+    echo socks -6 -s0 -n -a -p$PORT2 -i$ip_address -e$1:$a:$b:$c:$d >> /usr/local/3proxy/3proxy_$i.cfg
+    echo flush >> /usr/local/3proxy/3proxy_$i.cfg
     let "x += 1"
 done
 done
@@ -190,5 +190,5 @@ chmod +x /etc/rc.local
 
 for ((i=1; i <11; i++))
 do
-    cat ./user.list >> 3proxy_$i.cfg
+    cat ./user.list >> /usr/local/3proxy/3proxy_$i.cfg
 done
