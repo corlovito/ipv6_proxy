@@ -109,9 +109,9 @@ EOF
 ###generate file 3proxy
 ##############
 
-echo > user.list
-echo > ip.list
-echo > proxy_user.txt
+echo > /usr/local/3proxy/user.list
+echo > /usr/local/3proxy/ip.list
+echo > /usr/local/3proxy/proxy_user.txt
 echo > /etc/network/ip_add
 
 
@@ -121,7 +121,7 @@ count=1
 for ((i=1, y=1, MAXCOUNT=500, INT=10000, INT2=20000; i < 11; i++, INT+=500, INT2+=500))
 do
 x=1
-tee 3proxy_$i.cfg << EOF
+tee /usr/local/3proxy/3proxy_$i.cfg << EOF
 monitor /usr/local/3proxy/3proxy_$i.cfg
 daemon
 maxconn 500
